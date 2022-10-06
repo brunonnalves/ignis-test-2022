@@ -7,7 +7,7 @@ import React from "react"
 import ButtonDefault from "../../components/ButtonDefault/ButtonDefault"
 import HeaderDefault from "../../components/HeaderDefault/HeaderDefault"
 import { authService } from "../../services"
-import { LoginFormStyled, LoginMainContainer, LoginPageContainer } from "./styles"
+import { LoginFormContainer, LoginFormStyled, LoginMainContainer, LoginPageContainer } from "./styles"
 
 interface State {
   email: string;
@@ -65,7 +65,7 @@ const LoginPage: NextPage = () => {
         <LoginMainContainer>
           <HeaderDefault isIconExists={true} />
 
-          <div>
+          <LoginFormContainer>
             <p>E-mail / username</p>
             <LoginFormStyled variant="outlined">
               <OutlinedInput
@@ -97,7 +97,7 @@ const LoginPage: NextPage = () => {
                 }
               />
             </LoginFormStyled>
-          </div>
+          </LoginFormContainer>
 
           <ButtonDefault text={`Entrar`} onClick={() => { handleLogin() }} />
 

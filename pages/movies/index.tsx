@@ -7,6 +7,7 @@ import { MoviesFormStyled, MoviesMainContainer, MoviesPageContainer } from "./st
 import { NextPage } from "next"
 import { getMoviesService } from "../../services"
 import { IMovies } from "../../services/getMovies/types"
+import ButtonDefault from "../../components/ButtonDefault/ButtonDefault"
 
 
 const MoviesPage: NextPage = () => {
@@ -60,6 +61,8 @@ const MoviesPage: NextPage = () => {
               <p>{movie.title}</p>
             ))}
           </div>
+
+          <ButtonDefault text="Ver mais" onClick={() => { console.log('clicou') }} />
         </MoviesMainContainer>
       </MoviesPageContainer>
     </>

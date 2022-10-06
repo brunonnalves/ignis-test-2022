@@ -1,9 +1,6 @@
 import styled from 'styled-components';
 
 export const HomePageContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   background-image: url('/cine-background.png');
   background-size: cover;
   background-repeat:no-repeat;
@@ -11,6 +8,8 @@ export const HomePageContainer = styled.div`
 `;
 
 export const HomeMainContainer = styled.main`
+  display: flex;
+  flex-direction: column;
   height: 100vh;
   width: 100vw;
   text-align: center;

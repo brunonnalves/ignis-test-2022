@@ -2,13 +2,13 @@ import { FormControl } from '@mui/material';
 import styled from 'styled-components';
 
 export const MoviesPageContainer = styled.div`
-display: flex;
-flex-direction: column;
-align-items: center;
-background-image: url('/cine-background.png');
-background-size: cover;
-background-repeat:no-repeat;
-background-position: center center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-image: url('/cine-background.png');
+  background-size: cover;
+  background-repeat:no-repeat;
+  background-position: center center;
 `;
 
 export const MoviesMainContainer = styled.main`
