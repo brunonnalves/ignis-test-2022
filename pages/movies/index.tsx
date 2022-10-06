@@ -1,18 +1,21 @@
-import { IconButton, InputAdornment, OutlinedInput, Paper } from "@mui/material"
+import { Avatar, CardHeader, CardMedia, IconButton, InputAdornment, OutlinedInput, Typography } from "@mui/material"
 import SearchIcon from '@mui/icons-material/Search'
 import Head from "next/head"
 import React, { useEffect, useState } from "react"
 import HeaderDefault from "../../components/HeaderDefault/HeaderDefault"
-import { MoviesFormStyled, MoviesMainContainer, MoviesPageContainer } from "./styles"
+import { MovieCard, MovieCardOverview, MovieCardTitle, MoviesCardContainer, MoviesContainer, MoviesFormStyled, MoviesMainContainer, MoviesPageContainer, SearchContainer, WelcomeContainer } from "./styles"
 import { NextPage } from "next"
 import { getMoviesService } from "../../services"
 import { IMovies } from "../../services/getMovies/types"
 import ButtonDefault from "../../components/ButtonDefault/ButtonDefault"
+import { red } from "@mui/material/colors"
 
 
 const MoviesPage: NextPage = () => {
   const [movies, setMovies] = useState<IMovies[]>([])
-  const user = typeof window !== "undefined" ? JSON.parse(localStorage.getItem('user') ?? '') : ''
+  const [user, setUser] = useState('');
+  useEffect(() => setUser(JSON.parse(localStorage.getItem('user') ?? '')), []);
+  console.log(user)
 
   useEffect(() => { handleGetMovies() }, []);
 
@@ -37,8 +40,8 @@ const MoviesPage: NextPage = () => {
         <MoviesMainContainer>
           <HeaderDefault isIconExists={true} />
 
-          <div>
-            <h1><span>Bem vindo</span>, </h1>
+          <WelcomeContainer><span>Bem vindo, </span>{user.name}</WelcomeContainer>
+          <SearchContainer>
 
             <MoviesFormStyled>
               <OutlinedInput
@@ -55,14 +58,40 @@ const MoviesPage: NextPage = () => {
               />
 
             </MoviesFormStyled>
+          </SearchContainer>
 
+          <MoviesContainer>
             <h1>Filmes</h1>
-            {movies.map(movie => (
-              <p>{movie.title}</p>
-            ))}
-          </div>
+            <MoviesCardContainer>
+              {movies.map(movie => (
+                <MovieCard>
+                  <CardMedia
+                    component="img"
+                    height="230"
+                    image={movie.poster_path}
+                    alt="green iguana"
+                  />
+                  <CardHeader
+                    avatar={
+                      <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+                        {movie.popularity}
+                      </Avatar>
+                    }
+                  />
+                  <MovieCardTitle>
+                    {movie.title}
+                  </MovieCardTitle>
+                  <MovieCardOverview>
+                    {movie.overview}
+                  </MovieCardOverview>
+                </MovieCard>
+              ))}
+
+            </MoviesCardContainer>
+          </MoviesContainer>
 
           <ButtonDefault text="Ver mais" onClick={() => { console.log('clicou') }} />
+
         </MoviesMainContainer>
       </MoviesPageContainer>
     </>
