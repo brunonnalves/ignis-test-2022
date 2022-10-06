@@ -1,8 +1,8 @@
 export interface IMovies {
-  popularity: number;
   title: string;
   overview: string;
   poster_path: string;
+  vote_average: number;
 }
 
 export interface IMoviesResponse {

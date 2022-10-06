@@ -3,7 +3,7 @@ import SearchIcon from '@mui/icons-material/Search'
 import Head from "next/head"
 import React, { useEffect, useState } from "react"
 import HeaderDefault from "../../components/HeaderDefault/HeaderDefault"
-import { MovieCard, MovieCardOverview, MovieCardTitle, MoviesCardContainer, MoviesContainer, MoviesFormStyled, MoviesMainContainer, MoviesPageContainer, SearchContainer, WelcomeContainer } from "./styles"
+import { MovieCard, MovieCardContent, MovieCardOverview, MovieCardTitle, MoviesCardContainer, MoviesContainer, MoviesFormStyled, MoviesMainContainer, MoviesPageContainer, SearchContainer, WelcomeContainer } from "./styles"
 import { NextPage } from "next"
 import { getMoviesService } from "../../services"
 import { IMovies } from "../../services/getMovies/types"
@@ -15,7 +15,6 @@ const MoviesPage: NextPage = () => {
   const [movies, setMovies] = useState<IMovies[]>([])
   const [user, setUser] = useState('');
   useEffect(() => setUser(JSON.parse(localStorage.getItem('user') ?? '')), []);
-  console.log(user)
 
   useEffect(() => { handleGetMovies() }, []);
 
@@ -65,25 +64,28 @@ const MoviesPage: NextPage = () => {
             <MoviesCardContainer>
               {movies.map(movie => (
                 <MovieCard>
+                  <CardHeader sx={{ height: 0, padding: 0 }}
+                    avatar={
+                      <Avatar sx={{ bgcolor: red[500], fontSize: 12, position: 'relative', top: 220, left: 6 }}>
+                        {`${movie.vote_average * 10}%`}
+                      </Avatar>
+                    }
+                  >
+                  </CardHeader>
                   <CardMedia
                     component="img"
                     height="230"
                     image={movie.poster_path}
-                    alt="green iguana"
                   />
-                  <CardHeader
-                    avatar={
-                      <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                        {movie.popularity}
-                      </Avatar>
-                    }
-                  />
-                  <MovieCardTitle>
-                    {movie.title}
-                  </MovieCardTitle>
-                  <MovieCardOverview>
-                    {movie.overview}
-                  </MovieCardOverview>
+                  <MovieCardContent>
+                    <MovieCardTitle>
+                      {movie.title}
+                    </MovieCardTitle>
+                    <MovieCardOverview>
+                      {movie.overview}
+                    </MovieCardOverview>
+
+                  </MovieCardContent>
                 </MovieCard>
               ))}
 

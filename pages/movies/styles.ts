@@ -1,4 +1,4 @@
-import { Card, FormControl, Typography } from '@mui/material';
+import { Card, CardContent, FormControl, Typography } from '@mui/material';
 import styled from 'styled-components';
 
 export const MoviesPageContainer = styled.div`
@@ -62,6 +62,10 @@ export const MovieCard = styled(Card)`
   margin-bottom: 16px;
   border-radius: 8px;
   background: #282828;
+`;
+
+export const MovieCardContent = styled(CardContent)`
+  padding: 17px 14px 19px 8px;
 `;
 
 export const MovieCardTitle = styled(Typography)`
