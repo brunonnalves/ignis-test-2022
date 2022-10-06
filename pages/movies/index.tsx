@@ -1,12 +1,28 @@
 import { IconButton, InputAdornment, OutlinedInput, Paper } from "@mui/material"
 import SearchIcon from '@mui/icons-material/Search'
 import Head from "next/head"
-import React from "react"
+import React, { useEffect, useState } from "react"
 import HeaderDefault from "../../components/HeaderDefault/HeaderDefault"
 import { MoviesFormStyled, MoviesMainContainer, MoviesPageContainer } from "./styles"
+import { NextPage } from "next"
+import { getMoviesService } from "../../services"
+import { IMovies } from "../../services/getMovies/types"
 
 
-function MoviesPage() {
+const MoviesPage: NextPage = () => {
+  const [movies, setMovies] = useState<IMovies[]>([])
+  const user = typeof window !== "undefined" ? JSON.parse(localStorage.getItem('user') ?? '') : ''
+
+  useEffect(() => { handleGetMovies() }, []);
+
+  const handleGetMovies = async () => {
+    try {
+      const { results } = await getMoviesService.getMovies()
+      setMovies(results)
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   return (
     <>
@@ -21,7 +37,7 @@ function MoviesPage() {
           <HeaderDefault isIconExists={true} />
 
           <div>
-            <h1><span>Bem vindo</span>, Marcelo</h1>
+            <h1><span>Bem vindo</span>, </h1>
 
             <MoviesFormStyled>
               <OutlinedInput
@@ -39,6 +55,10 @@ function MoviesPage() {
 
             </MoviesFormStyled>
 
+            <h1>Filmes</h1>
+            {movies.map(movie => (
+              <p>{movie.title}</p>
+            ))}
           </div>
         </MoviesMainContainer>
       </MoviesPageContainer>

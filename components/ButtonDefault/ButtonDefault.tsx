@@ -1,15 +1,16 @@
+import { useRouter } from "next/router";
 import { ButtonContainer } from "./styles";
 
 interface ButtonDefaultProps {
-  text: String,
-  path: String,
+  text: string,
+  onClick: () => void,
 }
 
-function ButtonDefault({ text, path }: ButtonDefaultProps) {
+function ButtonDefault({ text, onClick }: ButtonDefaultProps) {
   return (
     <>
       <ButtonContainer>
-        <button onClick={() => { location.href = `${path}` }}>
+        <button onClick={onClick}>
           {text}
         </button>
       </ButtonContainer>

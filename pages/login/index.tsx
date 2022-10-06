@@ -1,9 +1,12 @@
-import { Visibility, VisibilityOff } from "@mui/icons-material"
+import { Router, Visibility, VisibilityOff } from "@mui/icons-material"
 import { IconButton, InputAdornment, OutlinedInput } from "@mui/material"
+import { NextPage } from "next"
 import Head from "next/head"
+import { useRouter } from "next/router"
 import React from "react"
 import ButtonDefault from "../../components/ButtonDefault/ButtonDefault"
 import HeaderDefault from "../../components/HeaderDefault/HeaderDefault"
+import { authService } from "../../services"
 import { LoginFormStyled, LoginMainContainer, LoginPageContainer } from "./styles"
 
 interface State {
@@ -12,7 +15,8 @@ interface State {
   showPassword: boolean;
 }
 
-function LoginPage() {
+const LoginPage: NextPage = () => {
+  const router = useRouter();
   const [values, setValues] = React.useState<State>({
     email: '',
     password: '',
@@ -34,6 +38,20 @@ function LoginPage() {
   const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
   };
+
+  const handleLogin = async () => {
+    try {
+      const { accessToken, user } = await authService.login({
+        email: values.email,
+        password: values.password,
+      })
+      localStorage.setItem('accessToken', accessToken.token)
+      localStorage.setItem('user', JSON.stringify(user))
+      router.push('movies')
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   return (
     <>
@@ -81,7 +99,7 @@ function LoginPage() {
             </LoginFormStyled>
           </div>
 
-          <ButtonDefault text={`Entrar`} path={`/movies`} />
+          <ButtonDefault text={`Entrar`} onClick={() => { handleLogin() }} />
 
         </LoginMainContainer>
       </LoginPageContainer>

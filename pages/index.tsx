@@ -1,10 +1,12 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
+import { useRouter } from 'next/router'
 import ButtonDefault from '../components/ButtonDefault/ButtonDefault'
 import HeaderDefault from '../components/HeaderDefault/HeaderDefault'
 import { HomeMainContainer, HomePageContainer, PersonaContainer, SloganContainer } from './styles'
 
 const Home: NextPage = () => {
+  const router = useRouter();
 
   return (
     <HomePageContainer>
@@ -26,7 +28,7 @@ const Home: NextPage = () => {
           <img src="/persona.svg" alt="" />
         </PersonaContainer>
 
-        <ButtonDefault text={`Começar a ver filmes`} path={`login`} />
+        <ButtonDefault text={`Começar a ver filmes`} onClick={() => { router.push('login') }} />
 
       </HomeMainContainer>
 

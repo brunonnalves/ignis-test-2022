@@ -19,7 +19,7 @@ export const MoviesMainContainer = styled.main`
   & > div {
     padding: 90px 20px 0 20px;
     
-    & > p {
+    & > h1 {
       text-align: start;
       margin: 8px 0;
     }

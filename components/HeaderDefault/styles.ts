@@ -7,7 +7,7 @@ export const HeaderContainer = styled.header`
 `;
 
 export const IconContainer = styled(IconButton)`
-  position: absolute;
+  position: absolute !important;
   padding: 0;
   left: 32px;
   top: 69px;
