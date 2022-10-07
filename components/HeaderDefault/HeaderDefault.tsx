@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 
 interface HeaderDefaultProps {
   isIconExists: Boolean,
-}
+};
 
 function HeaderDefault({ isIconExists }: HeaderDefaultProps) {
   const router = useRouter();
@@ -16,10 +16,13 @@ function HeaderDefault({ isIconExists }: HeaderDefaultProps) {
         </IconContainer>
       }
       <LogoContainer >
-        <img src='/logo-ignisflix.svg' />
+        <img
+          src='/logo-ignisflix.svg'
+          alt="Logo da IgnisFlix inciando com um ícone de um rolo de filmagem seguido do nome IgnisFlix"
+        />
       </LogoContainer>
     </HeaderContainer>
   )
-}
+};
 
 export default HeaderDefault;

@@ -1,10 +1,9 @@
-import { useRouter } from "next/router";
 import { ButtonContainer } from "./styles";
 
 interface ButtonDefaultProps {
   text: string,
   onClick: () => void,
-}
+};
 
 function ButtonDefault({ text, onClick }: ButtonDefaultProps) {
   return (
@@ -16,6 +15,6 @@ function ButtonDefault({ text, onClick }: ButtonDefaultProps) {
       </ButtonContainer>
     </>
   )
-}
+};
 
 export default ButtonDefault;

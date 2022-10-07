@@ -1,29 +1,31 @@
-import { CardHeader, CardMedia, IconButton, InputAdornment, OutlinedInput, Typography } from "@mui/material"
-import SearchIcon from '@mui/icons-material/Search'
-import Head from "next/head"
-import React, { useCallback, useEffect, useState } from "react"
-import HeaderDefault from "../../components/HeaderDefault/HeaderDefault"
-import { MovieCard, MovieCardActions, MovieCardAverage, MovieCardButton, MovieCardContent, MovieCardOverview, MovieCardTitle, MoviesCardContainer, MoviesContainer, MoviesFormStyled, MoviesMainContainer, MoviesPageContainer, SearchContainer, WelcomeContainer } from "./styles"
-import { NextPage } from "next"
-import { getMoviesService } from "../../services"
-import { IMovies } from "../../services/getMovies/types"
-import ButtonDefault from "../../components/ButtonDefault/ButtonDefault"
-import { IUser } from "../../services/auth/types"
-import { debounce } from "lodash"
+import { CardHeader, CardMedia, IconButton, InputAdornment, OutlinedInput } from "@mui/material";
+import SearchIcon from '@mui/icons-material/Search';
+import Head from "next/head";
+import React, { useCallback, useEffect, useState } from "react";
+import HeaderDefault from "../../components/HeaderDefault/HeaderDefault";
+import { MovieCard, MovieCardActions, MovieCardAverage, MovieCardButton, MovieCardContent, MovieCardOverview, MovieCardTitle, MoviesCardContainer, MoviesContainer, MoviesFormStyled, MoviesMainContainer, MoviesPageContainer, SearchContainer, WelcomeContainer } from "./styles";
+import { NextPage } from "next";
+import { getMoviesService } from "../../services";
+import { IMovies } from "../../services/getMovies/types";
+import ButtonDefault from "../../components/ButtonDefault/ButtonDefault";
+import { IUser } from "../../services/auth/types";
+import { debounce } from "lodash";
+import { motion } from "framer-motion";
 
 
 const MoviesPage: NextPage = () => {
   const [movies, setMovies] = useState<IMovies[]>([]);
   const [page, setPage] = useState(1);
   const [user, setUser] = useState<IUser>();
-  const [isSearching, setIsSearching] = useState(false)
+  const [isSearching, setIsSearching] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => setUser(JSON.parse(localStorage.getItem('user') ?? '')), []);
 
   useEffect(() => { handleGetMovies() }, [page]);
 
   const handleSearch = async (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | undefined) => {
     const newString = event?.target.value;
-    setIsSearching(newString && newString.length > 0 ? true : false)
+    setIsSearching(newString && newString.length > 0 ? true : false);
     handleSearchMovies(newString ?? '');
   };
 
@@ -31,27 +33,36 @@ const MoviesPage: NextPage = () => {
 
   const handleGetMovies = async () => {
     try {
-      const { results } = await getMoviesService.getMovies(page)
-      const list = [...movies, ...results]
-      setMovies(list)
+      const { results } = await getMoviesService.getMovies(page);
+      const list = [...movies, ...results];
+      setMovies(list);
     } catch (error) {
-      console.log(error)
-    }
-  }
+      console.log(error);
+    };
+  };
 
   const handleSearchMovies = async (search: string) => {
     try {
-      const { results } = await getMoviesService.searchMovies(search)
-      setMovies(results)
+      const { results } = await getMoviesService.searchMovies(search);
+      setMovies(results);
     } catch (error) {
-      console.log(error)
-    }
-  }
+      console.log(error);
+    };
+  };
 
-  const handleLoadMoreButtonClick = () => { setPage(page + 1) };
+  const handleLoadMoreButtonClick = () => {
+    setIsLoading(true);
+    setPage(page + 1);
+    setIsLoading(false);
+  };
 
   return (
-    <>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5 }}
+    >
       <MoviesPageContainer>
         <Head>
           <title>IgnisFlix | Movies</title>
@@ -111,7 +122,9 @@ const MoviesPage: NextPage = () => {
 
                   </MovieCardContent>
                   <MovieCardActions>
-                    <MovieCardButton size="small">ver mais</MovieCardButton>
+                    <MovieCardButton>
+                      ver mais
+                    </MovieCardButton>
                   </MovieCardActions>
                 </MovieCard>
               ))}
@@ -119,11 +132,11 @@ const MoviesPage: NextPage = () => {
             </MoviesCardContainer>
           </MoviesContainer>
 
-          {!isSearching && <ButtonDefault text="Ver mais" onClick={() => { handleLoadMoreButtonClick() }} />}
+          {!isSearching && <ButtonDefault text="Ver mais" onClick={!isLoading ? () => { handleLoadMoreButtonClick() } : () => { }} />}
 
         </MoviesMainContainer>
       </MoviesPageContainer>
-    </>
+    </motion.div>
   )
 }
 

@@ -1,19 +1,20 @@
-import { Router, Visibility, VisibilityOff } from "@mui/icons-material"
-import { IconButton, InputAdornment, OutlinedInput } from "@mui/material"
-import { NextPage } from "next"
-import Head from "next/head"
-import { useRouter } from "next/router"
-import React from "react"
-import ButtonDefault from "../../components/ButtonDefault/ButtonDefault"
-import HeaderDefault from "../../components/HeaderDefault/HeaderDefault"
-import { authService } from "../../services"
-import { LoginFormContainer, LoginFormStyled, LoginMainContainer, LoginPageContainer } from "./styles"
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { IconButton, InputAdornment, OutlinedInput } from "@mui/material";
+import { NextPage } from "next";
+import Head from "next/head";
+import { useRouter } from "next/router";
+import React, { useState } from "react";
+import ButtonDefault from "../../components/ButtonDefault/ButtonDefault";
+import HeaderDefault from "../../components/HeaderDefault/HeaderDefault";
+import { authService } from "../../services";
+import { LoginFormContainer, LoginFormStyled, LoginMainContainer, LoginPageContainer } from "./styles";
+import { motion } from "framer-motion";
 
 interface State {
   email: string;
   password: string;
   showPassword: boolean;
-}
+};
 
 const LoginPage: NextPage = () => {
   const router = useRouter();
@@ -22,6 +23,7 @@ const LoginPage: NextPage = () => {
     password: '',
     showPassword: false,
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange =
     (prop: keyof State) => (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,21 +42,28 @@ const LoginPage: NextPage = () => {
   };
 
   const handleLogin = async () => {
+    setIsLoading(true);
     try {
       const { accessToken, user } = await authService.login({
         email: values.email,
         password: values.password,
       })
-      localStorage.setItem('accessToken', accessToken.token)
-      localStorage.setItem('user', JSON.stringify(user))
-      router.push('movies')
+      localStorage.setItem('accessToken', accessToken.token);
+      localStorage.setItem('user', JSON.stringify(user));
+      router.push('movies');
     } catch (error) {
-      console.log(error)
-    }
-  }
+      console.log(error);
+    };
+    setIsLoading(false);
+  };
 
   return (
-    <>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5 }}
+    >
       <LoginPageContainer>
         <Head>
           <title>IgnisFlix | Login</title>
@@ -99,11 +108,11 @@ const LoginPage: NextPage = () => {
             </LoginFormStyled>
           </LoginFormContainer>
 
-          <ButtonDefault text={`Entrar`} onClick={() => { handleLogin() }} />
+          <ButtonDefault text={`Entrar`} onClick={!isLoading ? () => { handleLogin() } : () => { }} />
 
         </LoginMainContainer>
       </LoginPageContainer>
-    </>
+    </motion.div>
   )
 }
 
