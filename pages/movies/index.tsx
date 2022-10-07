@@ -1,31 +1,54 @@
-import { Avatar, CardHeader, CardMedia, IconButton, InputAdornment, OutlinedInput, Typography } from "@mui/material"
+import { CardHeader, CardMedia, IconButton, InputAdornment, OutlinedInput, Typography } from "@mui/material"
 import SearchIcon from '@mui/icons-material/Search'
 import Head from "next/head"
-import React, { useEffect, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import HeaderDefault from "../../components/HeaderDefault/HeaderDefault"
-import { MovieCard, MovieCardContent, MovieCardOverview, MovieCardTitle, MoviesCardContainer, MoviesContainer, MoviesFormStyled, MoviesMainContainer, MoviesPageContainer, SearchContainer, WelcomeContainer } from "./styles"
+import { MovieCard, MovieCardActions, MovieCardAverage, MovieCardButton, MovieCardContent, MovieCardOverview, MovieCardTitle, MoviesCardContainer, MoviesContainer, MoviesFormStyled, MoviesMainContainer, MoviesPageContainer, SearchContainer, WelcomeContainer } from "./styles"
 import { NextPage } from "next"
 import { getMoviesService } from "../../services"
 import { IMovies } from "../../services/getMovies/types"
 import ButtonDefault from "../../components/ButtonDefault/ButtonDefault"
-import { red } from "@mui/material/colors"
+import { IUser } from "../../services/auth/types"
+import { debounce } from "lodash"
 
 
 const MoviesPage: NextPage = () => {
-  const [movies, setMovies] = useState<IMovies[]>([])
-  const [user, setUser] = useState('');
+  const [movies, setMovies] = useState<IMovies[]>([]);
+  const [page, setPage] = useState(1);
+  const [user, setUser] = useState<IUser>();
+  const [isSearching, setIsSearching] = useState(false)
   useEffect(() => setUser(JSON.parse(localStorage.getItem('user') ?? '')), []);
 
-  useEffect(() => { handleGetMovies() }, []);
+  useEffect(() => { handleGetMovies() }, [page]);
+
+  const handleSearch = async (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | undefined) => {
+    const newString = event?.target.value;
+    setIsSearching(newString && newString.length > 0 ? true : false)
+    handleSearchMovies(newString ?? '');
+  };
+
+  const debouncedHandleSearch = useCallback(debounce(handleSearch, 300), []);
 
   const handleGetMovies = async () => {
     try {
-      const { results } = await getMoviesService.getMovies()
+      const { results } = await getMoviesService.getMovies(page)
+      const list = [...movies, ...results]
+      setMovies(list)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const handleSearchMovies = async (search: string) => {
+    try {
+      const { results } = await getMoviesService.searchMovies(search)
       setMovies(results)
     } catch (error) {
       console.log(error)
     }
   }
+
+  const handleLoadMoreButtonClick = () => { setPage(page + 1) };
 
   return (
     <>
@@ -39,12 +62,13 @@ const MoviesPage: NextPage = () => {
         <MoviesMainContainer>
           <HeaderDefault isIconExists={true} />
 
-          <WelcomeContainer><span>Bem vindo, </span>{user.name}</WelcomeContainer>
+          <WelcomeContainer><span>Bem vindo, </span>{user?.name}</WelcomeContainer>
           <SearchContainer>
 
             <MoviesFormStyled>
               <OutlinedInput
                 placeholder="Buscar filme"
+                onChange={debouncedHandleSearch}
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
@@ -63,12 +87,12 @@ const MoviesPage: NextPage = () => {
             <h1>Filmes</h1>
             <MoviesCardContainer>
               {movies.map(movie => (
-                <MovieCard>
+                <MovieCard key={movie.id}>
                   <CardHeader sx={{ height: 0, padding: 0 }}
                     avatar={
-                      <Avatar sx={{ bgcolor: red[500], fontSize: 12, position: 'relative', top: 220, left: 6 }}>
+                      <MovieCardAverage>
                         {`${movie.vote_average * 10}%`}
-                      </Avatar>
+                      </MovieCardAverage>
                     }
                   >
                   </CardHeader>
@@ -86,13 +110,16 @@ const MoviesPage: NextPage = () => {
                     </MovieCardOverview>
 
                   </MovieCardContent>
+                  <MovieCardActions>
+                    <MovieCardButton size="small">ver mais</MovieCardButton>
+                  </MovieCardActions>
                 </MovieCard>
               ))}
 
             </MoviesCardContainer>
           </MoviesContainer>
 
-          <ButtonDefault text="Ver mais" onClick={() => { console.log('clicou') }} />
+          {!isSearching && <ButtonDefault text="Ver mais" onClick={() => { handleLoadMoreButtonClick() }} />}
 
         </MoviesMainContainer>
       </MoviesPageContainer>

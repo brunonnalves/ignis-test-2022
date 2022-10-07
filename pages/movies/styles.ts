@@ -1,4 +1,4 @@
-import { Card, CardContent, FormControl, Typography } from '@mui/material';
+import { Avatar, Button, Card, CardActions, CardContent, FormControl, Typography } from '@mui/material';
 import styled from 'styled-components';
 
 export const MoviesPageContainer = styled.div`
@@ -68,16 +68,57 @@ export const MovieCardContent = styled(CardContent)`
   padding: 17px 14px 19px 8px;
 `;
 
+export const MovieCardAverage = styled(Avatar)`
+  position: 'relative';
+  top: 220px;
+  left: 6px;
+  font-family: 'Helvetica';
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 14px;
+  background-color: #000000;
+  border: 1.6px solid;
+  border-color: linear-gradient(215.46deg, #F52D2D 17.76%, #3A2FAF 85.58%);
+`;
+
 export const MovieCardTitle = styled(Typography)`
-ont-family: 'Helvetica';
-font-weight: 700;
-font-size: 14px;
-color: #FFFFFF;
+  font-family: 'Helvetica';
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 16px;
+  color: #FFFFFF;
+  height: 20px;
+  margin-bottom: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 export const MovieCardOverview = styled(Typography)`
-font-family: 'Helvetica';
-font-weight: 400;
-font-size: 10px;
-color: #A8A8A8;
+  font-family: 'Helvetica';
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 11px;
+  color: #A8A8A8;
+  height: 22px;
+  display: -webkit-box;   
+  -webkit-line-clamp: 2;   
+  -webkit-box-orient: vertical;     
+  overflow: hidden; 
+`;
+
+export const MovieCardActions = styled(CardActions)`
+  margin: 0;
+  padding: 0;
+  justify-content: flex-end;
+`;
+
+export const MovieCardButton = styled(Button)`
+  padding: 0;
+  text-transform: lowercase;
+  font-family: 'Helvetica';
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 11px;
+  color: #FFFFFF;
 `;
