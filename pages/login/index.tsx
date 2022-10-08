@@ -72,7 +72,7 @@ const LoginPage: NextPage = () => {
         </Head>
 
         <LoginMainContainer>
-          <HeaderDefault isIconExists={true} />
+          <HeaderDefault isIconExists={true} onClick={() => { router.back() }} />
 
           <LoginFormContainer>
             <p>E-mail / username</p>

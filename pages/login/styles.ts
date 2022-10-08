@@ -18,14 +18,20 @@ export const LoginMainContainer = styled.main`
 `;
 
 export const LoginFormContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   padding: 90px 20px 0 20px;
   & > p {
+      max-width: 380px;
+      width: 100%;
       text-align: start;
       margin: 8px 0;
     }
 `;
 
 export const LoginFormStyled = styled(FormControl)(({theme}) => ({
+  maxWidth: '380px',
   width: '100%',
   borderRadius: '8px',
   backgroundColor: '#282828',

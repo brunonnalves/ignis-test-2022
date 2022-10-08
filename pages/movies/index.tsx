@@ -11,15 +11,24 @@ import ButtonDefault from "../../components/ButtonDefault/ButtonDefault";
 import { IUser } from "../../services/auth/types";
 import { debounce } from "lodash";
 import { motion } from "framer-motion";
+import { useRouter } from "next/router";
 
 
 const MoviesPage: NextPage = () => {
+  const router = useRouter();
   const [movies, setMovies] = useState<IMovies[]>([]);
   const [page, setPage] = useState(1);
   const [user, setUser] = useState<IUser>();
   const [isSearching, setIsSearching] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  useEffect(() => setUser(JSON.parse(localStorage.getItem('user') ?? '')), []);
+
+  useEffect(() => {
+    if (localStorage.getItem('user') !== null) {
+      setUser(JSON.parse(localStorage.getItem('user') ?? ''));
+    } else {
+      router.push('/');
+    }
+  }, []);
 
   useEffect(() => { handleGetMovies() }, [page]);
 
@@ -56,6 +65,11 @@ const MoviesPage: NextPage = () => {
     setIsLoading(false);
   };
 
+  const handleBackClick = () => {
+    localStorage.clear();
+    router.push('login');
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -71,7 +85,7 @@ const MoviesPage: NextPage = () => {
         </Head>
 
         <MoviesMainContainer>
-          <HeaderDefault isIconExists={true} />
+          <HeaderDefault isIconExists={true} onClick={() => { handleBackClick() }} />
 
           <WelcomeContainer><span>Bem vindo, </span>{user?.name}</WelcomeContainer>
           <SearchContainer>

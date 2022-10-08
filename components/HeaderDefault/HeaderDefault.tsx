@@ -1,17 +1,16 @@
 import { HeaderContainer, IconContainer, LogoContainer } from "./styles";
 import ArrowBackIosNewOutlinedIcon from '@mui/icons-material/ArrowBackIosNewOutlined';
-import { useRouter } from "next/router";
 
 interface HeaderDefaultProps {
   isIconExists: Boolean,
+  onClick?: () => void,
 };
 
-function HeaderDefault({ isIconExists }: HeaderDefaultProps) {
-  const router = useRouter();
+function HeaderDefault({ isIconExists, onClick }: HeaderDefaultProps) {
   return (
     <HeaderContainer>
       {isIconExists &&
-        <IconContainer onClick={() => { router.back() }}>
+        <IconContainer onClick={onClick}>
           <ArrowBackIosNewOutlinedIcon />
         </IconContainer>
       }

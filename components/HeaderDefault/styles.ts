@@ -7,14 +7,14 @@ export const HeaderContainer = styled.header`
 `;
 
 export const IconContainer = styled(IconButton)`
-  position: absolute !important;
-  padding: 0;
-  left: 32px;
-  top: 65px;
-  & .MuiSvgIcon-root {
-    color: #A8A8A8;
-    height: 20px;
-  };
+    position: absolute !important;
+    padding: 0;
+    left: 32px;
+    top: 65px;
+    & .MuiSvgIcon-root {
+      color: #A8A8A8;
+      height: 20px;
+    };
 `;
 
 export const LogoContainer = styled.div`

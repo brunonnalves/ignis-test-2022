@@ -5,9 +5,12 @@ import ButtonDefault from '../components/ButtonDefault/ButtonDefault';
 import HeaderDefault from '../components/HeaderDefault/HeaderDefault';
 import { HomeMainContainer, HomePageContainer, PersonaContainer, SloganContainer } from './styles';
 import { motion } from "framer-motion";
+import { useEffect, useState } from 'react';
 
 const Home: NextPage = () => {
   const router = useRouter();
+  const [isTokenExists, setIsTokenExists] = useState(false);
+  useEffect(() => setIsTokenExists(localStorage.getItem('accessToken') !== null ? true : false), []);
 
   return (
     <motion.div
@@ -38,7 +41,7 @@ const Home: NextPage = () => {
             />
           </PersonaContainer>
 
-          <ButtonDefault text={`Começar a ver filmes`} onClick={() => { router.push('login') }} />
+          <ButtonDefault text={`Começar a ver filmes`} onClick={isTokenExists ? () => { router.push('movies') } : () => { router.push('login') }} />
 
         </HomeMainContainer>
 

@@ -5,6 +5,7 @@ export const ButtonContainer = styled.div`
   padding: 0 20px 110px 20px;
   width: 100%;
   & > button {
+    max-width: 380px;
     width: 100%;
     height: 48px;
     background: #F52D2D;
